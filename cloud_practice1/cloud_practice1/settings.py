@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,3 +123,27 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# S3 Settings
+LIARA_ENDPOINT    = "https://storage.c2.liara.space"
+LIARA_BUCKET_NAME = "cloud-computing-practice1-40031022"
+LIARA_ACCESS_KEY  = "p1acqtur7hl54lhm"
+LIARA_SECRET_KEY  = "3d85581f-1434-4f7c-8250-d0c000d7b69b"
+
+# S3 Settings Based on AWS (optional)
+AWS_ACCESS_KEY_ID       = LIARA_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY   = LIARA_SECRET_KEY
+AWS_STORAGE_BUCKET_NAME = LIARA_BUCKET_NAME
+AWS_S3_ENDPOINT_URL     = LIARA_ENDPOINT
+AWS_S3_REGION_NAME      = 'us-east-1'  
+
+# Django-storages configuration
+STORAGES = {
+  "default": {
+      "BACKEND": "storages.backends.s3.S3Storage",
+  },
+  "staticfiles": {
+      "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+  },
+}
