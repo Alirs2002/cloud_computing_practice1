@@ -13,7 +13,8 @@ def answer(request):
 
     if request.method=='POST':
         img = request.FILES.get('image')
-
+        email = request.POST.get("email")
+        print(email)
         if not img.name.lower().endswith(('.png', '.jpg', '.jpeg')):
             return HttpResponse("please upload a valid picture please")
         #fs = FileSystemStorage()
@@ -40,4 +41,4 @@ def answer(request):
             path = default_storage.save(img.name, img)
         except Exception as e:
             return HttpResponse(f"Error uploading file: {str(e)}")
-    return HttpResponse(path)
+    return HttpResponse(email)
