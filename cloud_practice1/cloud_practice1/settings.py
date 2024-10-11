@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'cloud_practice1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cloud-computing-database',
+        'NAME': 'cloud_practice1',
         'USER': 'root',
         'PASSWORD': 'sPp1eeaw0L78YduOFKIKXdbW',
         'HOST': 'fitz-roy.liara.cloud',  # e.g., 'your-db-instance.region.rds.amazonaws.com'

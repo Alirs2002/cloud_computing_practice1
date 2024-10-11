@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from .models import request_data
 
 # Create your views here.
 @csrf_exempt
@@ -17,9 +18,11 @@ def answer(request):
         print(email)
         if not img.name.lower().endswith(('.png', '.jpg', '.jpeg')):
             return HttpResponse("please upload a valid picture please")
-        #fs = FileSystemStorage()
-        #filename = fs.save(img.name,img)
-        #file_path = fs.url(filename)
+        
+
+        entity = request_data(email=email,status = "pending" ,  prev_url = img.name)
+        entity.save()
+
 
         access_key = "p1acqtur7hl54lhm"
         secret_key = "3d85581f-1434-4f7c-8250-d0c000d7b69b"
@@ -29,7 +32,7 @@ def answer(request):
 
         content_file = ContentFile(img.read(), name=img.name)
         img.seek(0)
-            # Save the file using default_storage
+        
         
         #s3 = boto3.client('s3', aws_access_key_id='p1acqtur7hl54lhm',
          #                 aws_secret_access_key='3d85581f-1434-4f7c-8250-d0c000d7b69b')
@@ -41,4 +44,19 @@ def answer(request):
             path = default_storage.save(img.name, img)
         except Exception as e:
             return HttpResponse(f"Error uploading file: {str(e)}")
-    return HttpResponse(email)
+        
+        print(default_storage+path)
+        #full_file_path = "https://storage.c2.liara.space/cloud-computing-practice1-40031022/"+path
+        with default_storage.open(path,"rb") as image_path:
+            image = image_path.read()
+            response = HttpResponse(image, content_type='image/jpeg')
+            response['Content-Disposition'] = f'inline; filename="{img.name}"'
+
+           # path2 = default_storage.save("kooni", response)
+            return response
+        
+        
+            
+            #path2 = default_storage.save("kooni", image)
+        
+    #return HttpResponse(response)
