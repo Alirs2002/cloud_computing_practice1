@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from .models import request_data
+from .rabbit import store_id_rabbit,consume_id
 
 # Create your views here.
 @csrf_exempt
@@ -22,6 +23,10 @@ def answer(request):
 
         entity = request_data(email=email,status = "pending" ,  prev_url = img.name)
         entity.save()
+
+        request_id = entity.ID
+        consume_id()
+        store_id_rabbit(request_id)
 
 
         access_key = "p1acqtur7hl54lhm"
@@ -45,13 +50,13 @@ def answer(request):
         except Exception as e:
             return HttpResponse(f"Error uploading file: {str(e)}")
         
-        print(default_storage+path)
+    
         #full_file_path = "https://storage.c2.liara.space/cloud-computing-practice1-40031022/"+path
         with default_storage.open(path,"rb") as image_path:
             image = image_path.read()
             response = HttpResponse(image, content_type='image/jpeg')
             response['Content-Disposition'] = f'inline; filename="{img.name}"'
-
+            consume_id()
            # path2 = default_storage.save("kooni", response)
             return response
         
