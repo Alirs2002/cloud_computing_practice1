@@ -21,14 +21,23 @@ def get_connection():
     )
     return pika.BlockingConnection(parameters=parameters)
 
-def store_id_rabbit(id):
+def store_id_rabbit(request_id):
     connection = get_connection()
-    chanel = connection.channel()
+    channel = connection.channel()
 
-    chanel.queue_declare(queue="request_queue")
-    chanel.basic_publish(exchange='',routing_key='request_ids',body=str(id))
-    print("the request_id has been stored")
+    channel.queue_declare(queue="request_queue")
+    channel.basic_publish(
+        exchange='',
+        routing_key='request_queue',
+        body='Your message body',
+        properties=pika.BasicProperties(
+            headers={'request_id': request_id}
+        )
+    )
+    print(f"The request_id '{request_id}' has been stored.")
     connection.close()
+
+
 
 
 
@@ -44,7 +53,6 @@ def consume_id():
             print(f"Received ID: {body.decode()}")
 
         channel.basic_consume(queue="request_queue", auto_ack=True, on_message_callback=callback)
-
         print("Waiting for messages...")
         channel.start_consuming()
     except Exception as e:

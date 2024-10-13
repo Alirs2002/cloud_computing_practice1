@@ -25,7 +25,7 @@ def answer(request):
         entity.save()
 
         request_id = entity.ID
-        consume_id()
+      
         store_id_rabbit(request_id)
 
 
@@ -56,12 +56,11 @@ def answer(request):
             image = image_path.read()
             response = HttpResponse(image, content_type='image/jpeg')
             response['Content-Disposition'] = f'inline; filename="{img.name}"'
-            consume_id()
-           # path2 = default_storage.save("kooni", response)
+       
+    
             return response
         
         
-            
-            #path2 = default_storage.save("kooni", image)
+   
         
     #return HttpResponse(response)

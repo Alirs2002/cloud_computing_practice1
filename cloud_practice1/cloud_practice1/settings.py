@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)^7b9=^g^s4kda2f9^&r^lwd5qntsc7lor&g7fu@kgtp3^tg3u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["django-app-cloud-practice1.liara.run"]
 
 
 # Application definition
